@@ -1,0 +1,32 @@
+service: php-api
+
+provider:
+  name: aws
+  region: us-west-2
+  runtime: provided.al2
+  architecture: x86_64
+  stage: dev
+  environment:
+    APP_ENV: production
+
+functions:
+  api:
+    handler: public/index.php
+    runtime: php-82
+    events:
+      - httpApi: '*'
+
+plugins:
+  - ./vendor/bref/bref
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!tests/**'
+    - '!**/*.md'
+    - '!**/*.xml'
+    - '!**/*.dist'
+    - '!README*'
+    - public/**
+    - vendor/**
+    - composer.json
