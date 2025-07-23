@@ -1,7 +1,9 @@
 {
+  "name": "benlimpic/shopify-backend",
+  "description": "Simple Shopify backend on Lambda",
   "require": {
-    "php": "^8.2",
-    "bref/bref": "^2.2"
+    "bref/bref": "^2.4",
+    "symfony/http-foundation": "^7.3"
   },
   "autoload": {
     "psr-4": {

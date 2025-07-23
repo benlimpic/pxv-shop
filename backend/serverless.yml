@@ -1,18 +1,21 @@
-service: php-api
+service: shopify-backend
+
+frameworkVersion: '4'
 
 provider:
   name: aws
-  region: us-west-2
-  runtime: provided.al2
-  architecture: x86_64
-  stage: dev
+  runtime: php-82-fpm
+  region: us-west-1
+  architecture: arm64
   environment:
-    APP_ENV: production
+    SHOPIFY_ACCESS_TOKEN: ${ssm:/shopify/access_token}
+    SHOPIFY_STORE_DOMAIN: ${ssm:/shopify/store_domain}
 
 functions:
   api:
     handler: public/index.php
-    runtime: php-82
+    layers:
+      - ${bref:layer.php-82-fpm}
     events:
       - httpApi: '*'
 
@@ -20,13 +23,9 @@ plugins:
   - ./vendor/bref/bref
 
 package:
-  patterns:
-    - '!node_modules/**'
-    - '!tests/**'
-    - '!**/*.md'
-    - '!**/*.xml'
-    - '!**/*.dist'
-    - '!README*'
-    - public/**
-    - vendor/**
-    - composer.json
+  exclude:
+    - node_modules/**
+    - .git/**
+    - .vscode/**
+    - tests/**
+    - README.md

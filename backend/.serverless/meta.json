@@ -4,16 +4,18 @@
     "servicePath": "/Users/benlimpic/Development/2025/projects/pvx-shop/backend/serverless.yml",
     "serviceConfigFileName": "serverless.yml",
     "service": {
-      "service": "php-api",
+      "service": "shopify-backend",
+      "frameworkVersion": "4",
       "provider": {
         "name": "aws",
-        "region": "us-west-2",
-        "runtime": "provided.al2",
-        "architecture": "x86_64",
-        "stage": "dev",
+        "runtime": "php-82-fpm",
+        "region": "us-west-1",
+        "architecture": "arm64",
         "environment": {
-          "APP_ENV": "production"
+          "SHOPIFY_ACCESS_TOKEN": "<REDACTED>",
+          "SHOPIFY_STORE_DOMAIN": "3ysbey-7j.myshopify.com"
         },
+        "stage": "dev",
         "versionFunctions": true,
         "deploymentMethod": "direct",
         "compiledCloudFormationTemplate": {
@@ -23,7 +25,7 @@
             "ApiLogGroup": {
               "Type": "AWS::Logs::LogGroup",
               "Properties": {
-                "LogGroupName": "/aws/lambda/php-api-dev-api"
+                "LogGroupName": "/aws/lambda/shopify-backend-dev-api"
               }
             },
             "IamRoleLambdaExecution": {
@@ -51,7 +53,7 @@
                       "Fn::Join": [
                         "-",
                         [
-                          "php-api",
+                          "shopify-backend",
                           "dev",
                           "lambda"
                         ]
@@ -69,7 +71,7 @@
                           ],
                           "Resource": [
                             {
-                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/php-api-dev*:*"
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shopify-backend-dev*:*"
                             }
                           ]
                         },
@@ -80,7 +82,7 @@
                           ],
                           "Resource": [
                             {
-                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/php-api-dev*:*:*"
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shopify-backend-dev*:*:*"
                             }
                           ]
                         }
@@ -93,7 +95,7 @@
                   "Fn::Join": [
                     "-",
                     [
-                      "php-api",
+                      "shopify-backend",
                       "dev",
                       {
                         "Ref": "AWS::Region"
@@ -108,20 +110,21 @@
               "Type": "AWS::Lambda::Function",
               "Properties": {
                 "Code": {
-                  "S3Bucket": "serverless-framework-deployments-us-west-2-c9873982-db00",
-                  "S3Key": "serverless/php-api/dev/1753249174714-2025-07-23T05:39:34.714Z/php-api.zip"
+                  "S3Bucket": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
+                  "S3Key": "serverless/shopify-backend/dev/1753293628894-2025-07-23T18:00:28.894Z/shopify-backend.zip"
                 },
                 "Handler": "public/index.php",
                 "Runtime": "provided.al2",
-                "FunctionName": "php-api-dev-api",
+                "FunctionName": "shopify-backend-dev-api",
                 "MemorySize": 1024,
                 "Timeout": 6,
                 "Architectures": [
-                  "x86_64"
+                  "arm64"
                 ],
                 "Environment": {
                   "Variables": {
-                    "APP_ENV": "production"
+                    "SHOPIFY_ACCESS_TOKEN": "<REDACTED>",
+                    "SHOPIFY_STORE_DOMAIN": "3ysbey-7j.myshopify.com"
                   }
                 },
                 "Role": {
@@ -131,27 +134,28 @@
                   ]
                 },
                 "Layers": [
-                  "arn:aws:lambda:us-west-2:534081306603:layer:php-82:101"
+                  "arn:aws:lambda:us-west-1:534081306603:layer:arm-php-82-fpm:89",
+                  "arn:aws:lambda:us-west-1:534081306603:layer:php-82-fpm:101"
                 ]
               },
               "DependsOn": [
                 "ApiLogGroup"
               ]
             },
-            "ApiLambdaVersionhCs0zL8a0WCOD4o6sEjePpWBoLgySaeD83rvyHCAec": {
+            "ApiLambdaVersionzrRLTkfrf3ch08VYLzqv8C36BPemnbI26WYptEtdxw": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "ApiLambdaFunction"
                 },
-                "CodeSha256": "ldye/h+uwGEhA7TMRfVTQpS3l1YuQqQYdyEVzYcvw44="
+                "CodeSha256": "0QeFCju7XgXuVQaefuELoocmY6mNa9oeR6FHxg0OlPw="
               }
             },
             "HttpApi": {
               "Type": "AWS::ApiGatewayV2::Api",
               "Properties": {
-                "Name": "dev-php-api",
+                "Name": "dev-shopify-backend",
                 "ProtocolType": "HTTP"
               }
             },
@@ -246,18 +250,18 @@
           },
           "Outputs": {
             "ServerlessDeploymentBucketName": {
-              "Value": "serverless-framework-deployments-us-west-2-c9873982-db00",
+              "Value": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
               "Export": {
-                "Name": "sls-php-api-dev-ServerlessDeploymentBucketName"
+                "Name": "sls-shopify-backend-dev-ServerlessDeploymentBucketName"
               }
             },
             "ApiLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "ApiLambdaVersionhCs0zL8a0WCOD4o6sEjePpWBoLgySaeD83rvyHCAec"
+                "Ref": "ApiLambdaVersionzrRLTkfrf3ch08VYLzqv8C36BPemnbI26WYptEtdxw"
               },
               "Export": {
-                "Name": "sls-php-api-dev-ApiLambdaFunctionQualifiedArn"
+                "Name": "sls-shopify-backend-dev-ApiLambdaFunctionQualifiedArn"
               }
             },
             "HttpApiId": {
@@ -266,7 +270,7 @@
                 "Ref": "HttpApi"
               },
               "Export": {
-                "Name": "sls-php-api-dev-HttpApiId"
+                "Name": "sls-shopify-backend-dev-HttpApiId"
               }
             },
             "HttpApiUrl": {
@@ -291,7 +295,7 @@
                 ]
               },
               "Export": {
-                "Name": "sls-php-api-dev-HttpApiUrl"
+                "Name": "sls-shopify-backend-dev-HttpApiUrl"
               }
             }
           }
@@ -301,54 +305,52 @@
       "functions": {
         "api": {
           "handler": "public/index.php",
-          "runtime": "provided.al2",
+          "layers": [
+            "arn:aws:lambda:us-west-1:534081306603:layer:arm-php-82-fpm:89",
+            "arn:aws:lambda:us-west-1:534081306603:layer:php-82-fpm:101"
+          ],
           "events": [
             {
               "httpApi": "*",
               "resolvedMethod": "ANY"
             }
           ],
-          "name": "php-api-dev-api",
-          "layers": [
-            "arn:aws:lambda:us-west-2:534081306603:layer:php-82:101"
-          ],
+          "name": "shopify-backend-dev-api",
+          "runtime": "provided.al2",
           "package": {},
           "memory": 1024,
           "timeout": 6,
           "vpc": {},
-          "versionLogicalId": "ApiLambdaVersionhCs0zL8a0WCOD4o6sEjePpWBoLgySaeD83rvyHCAec"
+          "versionLogicalId": "ApiLambdaVersionzrRLTkfrf3ch08VYLzqv8C36BPemnbI26WYptEtdxw"
         }
       },
       "plugins": [
         "./vendor/bref/bref"
       ],
       "package": {
-        "patterns": [
-          "!node_modules/**",
-          "!tests/**",
-          "!**/*.md",
-          "!**/*.xml",
-          "!**/*.dist",
-          "!README*",
-          "public/**",
-          "vendor/**",
-          "composer.json"
+        "exclude": [
+          "node_modules/**",
+          ".git/**",
+          ".vscode/**",
+          "tests/**",
+          "README.md"
         ],
-        "artifactsS3KeyDirname": "serverless/php-api/dev/code-artifacts",
-        "deploymentBucket": "serverless-framework-deployments-us-west-2-c9873982-db00",
-        "artifact": "/Users/benlimpic/Development/2025/projects/pvx-shop/backend/.serverless/php-api.zip",
-        "artifactDirectoryName": "serverless/php-api/dev/1753249174714-2025-07-23T05:39:34.714Z"
+        "artifactsS3KeyDirname": "serverless/shopify-backend/dev/code-artifacts",
+        "deploymentBucket": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
+        "artifact": "/Users/benlimpic/Development/2025/projects/pvx-shop/backend/.serverless/shopify-backend.zip",
+        "artifactDirectoryName": "serverless/shopify-backend/dev/1753293628894-2025-07-23T18:00:28.894Z"
       }
     },
     "provider": {
       "name": "aws",
-      "region": "us-west-2",
-      "runtime": "provided.al2",
-      "architecture": "x86_64",
-      "stage": "dev",
+      "runtime": "php-82-fpm",
+      "region": "us-west-1",
+      "architecture": "arm64",
       "environment": {
-        "APP_ENV": "production"
+        "SHOPIFY_ACCESS_TOKEN": "<REDACTED>",
+        "SHOPIFY_STORE_DOMAIN": "3ysbey-7j.myshopify.com"
       },
+      "stage": "dev",
       "versionFunctions": true,
       "deploymentMethod": "direct",
       "compiledCloudFormationTemplate": {
@@ -358,7 +360,7 @@
           "ApiLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/php-api-dev-api"
+              "LogGroupName": "/aws/lambda/shopify-backend-dev-api"
             }
           },
           "IamRoleLambdaExecution": {
@@ -386,7 +388,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "php-api",
+                        "shopify-backend",
                         "dev",
                         "lambda"
                       ]
@@ -404,7 +406,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/php-api-dev*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shopify-backend-dev*:*"
                           }
                         ]
                       },
@@ -415,7 +417,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/php-api-dev*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shopify-backend-dev*:*:*"
                           }
                         ]
                       }
@@ -428,7 +430,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "php-api",
+                    "shopify-backend",
                     "dev",
                     {
                       "Ref": "AWS::Region"
@@ -443,20 +445,21 @@
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
-                "S3Bucket": "serverless-framework-deployments-us-west-2-c9873982-db00",
-                "S3Key": "serverless/php-api/dev/1753249174714-2025-07-23T05:39:34.714Z/php-api.zip"
+                "S3Bucket": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
+                "S3Key": "serverless/shopify-backend/dev/1753293628894-2025-07-23T18:00:28.894Z/shopify-backend.zip"
               },
               "Handler": "public/index.php",
               "Runtime": "provided.al2",
-              "FunctionName": "php-api-dev-api",
+              "FunctionName": "shopify-backend-dev-api",
               "MemorySize": 1024,
               "Timeout": 6,
               "Architectures": [
-                "x86_64"
+                "arm64"
               ],
               "Environment": {
                 "Variables": {
-                  "APP_ENV": "production"
+                  "SHOPIFY_ACCESS_TOKEN": "<REDACTED>",
+                  "SHOPIFY_STORE_DOMAIN": "3ysbey-7j.myshopify.com"
                 }
               },
               "Role": {
@@ -466,27 +469,28 @@
                 ]
               },
               "Layers": [
-                "arn:aws:lambda:us-west-2:534081306603:layer:php-82:101"
+                "arn:aws:lambda:us-west-1:534081306603:layer:arm-php-82-fpm:89",
+                "arn:aws:lambda:us-west-1:534081306603:layer:php-82-fpm:101"
               ]
             },
             "DependsOn": [
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionhCs0zL8a0WCOD4o6sEjePpWBoLgySaeD83rvyHCAec": {
+          "ApiLambdaVersionzrRLTkfrf3ch08VYLzqv8C36BPemnbI26WYptEtdxw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "ldye/h+uwGEhA7TMRfVTQpS3l1YuQqQYdyEVzYcvw44="
+              "CodeSha256": "0QeFCju7XgXuVQaefuELoocmY6mNa9oeR6FHxg0OlPw="
             }
           },
           "HttpApi": {
             "Type": "AWS::ApiGatewayV2::Api",
             "Properties": {
-              "Name": "dev-php-api",
+              "Name": "dev-shopify-backend",
               "ProtocolType": "HTTP"
             }
           },
@@ -581,18 +585,18 @@
         },
         "Outputs": {
           "ServerlessDeploymentBucketName": {
-            "Value": "serverless-framework-deployments-us-west-2-c9873982-db00",
+            "Value": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
             "Export": {
-              "Name": "sls-php-api-dev-ServerlessDeploymentBucketName"
+              "Name": "sls-shopify-backend-dev-ServerlessDeploymentBucketName"
             }
           },
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionhCs0zL8a0WCOD4o6sEjePpWBoLgySaeD83rvyHCAec"
+              "Ref": "ApiLambdaVersionzrRLTkfrf3ch08VYLzqv8C36BPemnbI26WYptEtdxw"
             },
             "Export": {
-              "Name": "sls-php-api-dev-ApiLambdaFunctionQualifiedArn"
+              "Name": "sls-shopify-backend-dev-ApiLambdaFunctionQualifiedArn"
             }
           },
           "HttpApiId": {
@@ -601,7 +605,7 @@
               "Ref": "HttpApi"
             },
             "Export": {
-              "Name": "sls-php-api-dev-HttpApiId"
+              "Name": "sls-shopify-backend-dev-HttpApiId"
             }
           },
           "HttpApiUrl": {
@@ -626,7 +630,7 @@
               ]
             },
             "Export": {
-              "Name": "sls-php-api-dev-HttpApiUrl"
+              "Name": "sls-shopify-backend-dev-HttpApiUrl"
             }
           }
         }
@@ -642,44 +646,35 @@
       "serviceProvider": null,
       "instanceParameters": null
     },
-    "serviceRawFile": "service: php-api\n\nprovider:\n  name: aws\n  region: us-west-2\n  runtime: provided.al2\n  architecture: x86_64\n  stage: dev\n  environment:\n    APP_ENV: production\n\nfunctions:\n  api:\n    handler: public/index.php\n    runtime: php-82\n    events:\n      - httpApi: '*'\n\nplugins:\n  - ./vendor/bref/bref\n\npackage:\n  patterns:\n    - '!node_modules/**'\n    - '!tests/**'\n    - '!**/*.md'\n    - '!**/*.xml'\n    - '!**/*.dist'\n    - '!README*'\n    - public/**\n    - vendor/**\n    - composer.json\n",
+    "serviceRawFile": "service: shopify-backend\n\nframeworkVersion: '4'\n\nprovider:\n  name: aws\n  runtime: php-82-fpm\n  region: us-west-1\n  architecture: arm64\n  environment:\n    SHOPIFY_ACCESS_TOKEN: ${ssm:/shopify/access_token}\n    SHOPIFY_STORE_DOMAIN: ${ssm:/shopify/store_domain}\n\nfunctions:\n  api:\n    handler: public/index.php\n    layers:\n      - ${bref:layer.php-82-fpm}\n    events:\n      - httpApi: '*'\n\nplugins:\n  - ./vendor/bref/bref\n\npackage:\n  exclude:\n    - node_modules/**\n    - .git/**\n    - .vscode/**\n    - tests/**\n    - README.md\n",
     "command": [
       "deploy"
     ],
-    "options": {},
+    "options": {
+      "stage": "dev",
+      "region": "us-west-1"
+    },
     "orgId": "792d8d2c-53da-4ed6-8872-72372039438d",
     "orgName": "benlimpic",
     "userId": "06GvgmBVyHXpGDzzL6",
     "userName": "benlimpic",
     "serviceProviderAwsAccountId": "528316903558",
-    "serviceProviderAwsCfStackName": "php-api-dev",
-    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-west-2:528316903558:stack/php-api-dev/5e8a81b0-6777-11f0-a392-0aed738fbf05",
-    "serviceProviderAwsCfStackCreated": "2025-07-23T03:44:43.654Z",
-    "serviceProviderAwsCfStackUpdated": "2025-07-23T05:18:01.126Z",
+    "serviceProviderAwsCfStackName": "shopify-backend-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-west-1:528316903558:stack/shopify-backend-dev/8b315ab0-67e3-11f0-9ad9-0278b58da797",
+    "serviceProviderAwsCfStackCreated": "2025-07-23T16:39:04.219Z",
+    "serviceProviderAwsCfStackUpdated": "2025-07-23T17:43:32.630Z",
     "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "ApiLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:us-west-2:528316903558:function:php-api-dev-api:19",
+        "OutputValue": "arn:aws:lambda:us-west-1:528316903558:function:shopify-backend-dev-api:3",
         "Description": "Current Lambda function version",
-        "ExportName": "sls-php-api-dev-ApiLambdaFunctionQualifiedArn"
-      },
-      {
-        "OutputKey": "HttpApiId",
-        "OutputValue": "laktlpowf1",
-        "Description": "Id of the HTTP API",
-        "ExportName": "sls-php-api-dev-HttpApiId"
+        "ExportName": "sls-shopify-backend-dev-ApiLambdaFunctionQualifiedArn"
       },
       {
         "OutputKey": "ServerlessDeploymentBucketName",
-        "OutputValue": "serverless-framework-deployments-us-west-2-c9873982-db00",
-        "ExportName": "sls-php-api-dev-ServerlessDeploymentBucketName"
-      },
-      {
-        "OutputKey": "HttpApiUrl",
-        "OutputValue": "https://laktlpowf1.execute-api.us-west-2.amazonaws.com",
-        "Description": "URL of the HTTP API",
-        "ExportName": "sls-php-api-dev-HttpApiUrl"
+        "OutputValue": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
+        "ExportName": "sls-shopify-backend-dev-ServerlessDeploymentBucketName"
       }
     ],
     "compiledCloudFormationTemplate": {
@@ -689,7 +684,7 @@
         "ApiLogGroup": {
           "Type": "AWS::Logs::LogGroup",
           "Properties": {
-            "LogGroupName": "/aws/lambda/php-api-dev-api"
+            "LogGroupName": "/aws/lambda/shopify-backend-dev-api"
           }
         },
         "IamRoleLambdaExecution": {
@@ -717,7 +712,7 @@
                   "Fn::Join": [
                     "-",
                     [
-                      "php-api",
+                      "shopify-backend",
                       "dev",
                       "lambda"
                     ]
@@ -735,7 +730,7 @@
                       ],
                       "Resource": [
                         {
-                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/php-api-dev*:*"
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shopify-backend-dev*:*"
                         }
                       ]
                     },
@@ -746,7 +741,7 @@
                       ],
                       "Resource": [
                         {
-                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/php-api-dev*:*:*"
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/shopify-backend-dev*:*:*"
                         }
                       ]
                     }
@@ -759,7 +754,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "php-api",
+                  "shopify-backend",
                   "dev",
                   {
                     "Ref": "AWS::Region"
@@ -774,20 +769,21 @@
           "Type": "AWS::Lambda::Function",
           "Properties": {
             "Code": {
-              "S3Bucket": "serverless-framework-deployments-us-west-2-c9873982-db00",
-              "S3Key": "serverless/php-api/dev/1753249174714-2025-07-23T05:39:34.714Z/php-api.zip"
+              "S3Bucket": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
+              "S3Key": "serverless/shopify-backend/dev/1753293628894-2025-07-23T18:00:28.894Z/shopify-backend.zip"
             },
             "Handler": "public/index.php",
             "Runtime": "provided.al2",
-            "FunctionName": "php-api-dev-api",
+            "FunctionName": "shopify-backend-dev-api",
             "MemorySize": 1024,
             "Timeout": 6,
             "Architectures": [
-              "x86_64"
+              "arm64"
             ],
             "Environment": {
               "Variables": {
-                "APP_ENV": "production"
+                "SHOPIFY_ACCESS_TOKEN": "<REDACTED>",
+                "SHOPIFY_STORE_DOMAIN": "3ysbey-7j.myshopify.com"
               }
             },
             "Role": {
@@ -797,27 +793,28 @@
               ]
             },
             "Layers": [
-              "arn:aws:lambda:us-west-2:534081306603:layer:php-82:101"
+              "arn:aws:lambda:us-west-1:534081306603:layer:arm-php-82-fpm:89",
+              "arn:aws:lambda:us-west-1:534081306603:layer:php-82-fpm:101"
             ]
           },
           "DependsOn": [
             "ApiLogGroup"
           ]
         },
-        "ApiLambdaVersionhCs0zL8a0WCOD4o6sEjePpWBoLgySaeD83rvyHCAec": {
+        "ApiLambdaVersionzrRLTkfrf3ch08VYLzqv8C36BPemnbI26WYptEtdxw": {
           "Type": "AWS::Lambda::Version",
           "DeletionPolicy": "Retain",
           "Properties": {
             "FunctionName": {
               "Ref": "ApiLambdaFunction"
             },
-            "CodeSha256": "ldye/h+uwGEhA7TMRfVTQpS3l1YuQqQYdyEVzYcvw44="
+            "CodeSha256": "0QeFCju7XgXuVQaefuELoocmY6mNa9oeR6FHxg0OlPw="
           }
         },
         "HttpApi": {
           "Type": "AWS::ApiGatewayV2::Api",
           "Properties": {
-            "Name": "dev-php-api",
+            "Name": "dev-shopify-backend",
             "ProtocolType": "HTTP"
           }
         },
@@ -912,18 +909,18 @@
       },
       "Outputs": {
         "ServerlessDeploymentBucketName": {
-          "Value": "serverless-framework-deployments-us-west-2-c9873982-db00",
+          "Value": "serverless-framework-deployments-us-west-1-960aed4c-ccc2",
           "Export": {
-            "Name": "sls-php-api-dev-ServerlessDeploymentBucketName"
+            "Name": "sls-shopify-backend-dev-ServerlessDeploymentBucketName"
           }
         },
         "ApiLambdaFunctionQualifiedArn": {
           "Description": "Current Lambda function version",
           "Value": {
-            "Ref": "ApiLambdaVersionhCs0zL8a0WCOD4o6sEjePpWBoLgySaeD83rvyHCAec"
+            "Ref": "ApiLambdaVersionzrRLTkfrf3ch08VYLzqv8C36BPemnbI26WYptEtdxw"
           },
           "Export": {
-            "Name": "sls-php-api-dev-ApiLambdaFunctionQualifiedArn"
+            "Name": "sls-shopify-backend-dev-ApiLambdaFunctionQualifiedArn"
           }
         },
         "HttpApiId": {
@@ -932,7 +929,7 @@
             "Ref": "HttpApi"
           },
           "Export": {
-            "Name": "sls-php-api-dev-HttpApiId"
+            "Name": "sls-shopify-backend-dev-HttpApiId"
           }
         },
         "HttpApiUrl": {
@@ -957,7 +954,7 @@
             ]
           },
           "Export": {
-            "Name": "sls-php-api-dev-HttpApiUrl"
+            "Name": "sls-shopify-backend-dev-HttpApiUrl"
           }
         }
       }
